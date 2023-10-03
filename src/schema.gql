@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ManageEmployee {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  manageEmployees: [ManageEmployee!]!
+  manageEmployee(id: Int!): ManageEmployee!
+}
+
+type Mutation {
+  createManageEmployee(createManageEmployeeInput: CreateManageEmployeeInput!): ManageEmployee!
+  updateManageEmployee(updateManageEmployeeInput: UpdateManageEmployeeInput!): ManageEmployee!
+  removeManageEmployee(id: Int!): ManageEmployee!
+}
+
+input CreateManageEmployeeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateManageEmployeeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
