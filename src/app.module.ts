@@ -5,7 +5,9 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { join } from "path";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import { ManageEmployeesModule } from './manage-employees/manage-employees.module';
+import { EmployeesModule } from './employees/employees.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -15,7 +17,18 @@ import { ManageEmployeesModule } from './manage-employees/manage-employees.modul
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       autoSchemaFile: join(process.cwd(), "src/schema.gql"),
     }),
-    ManageEmployeesModule
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: 5030,
+      username: 'postgres',
+      password: 'SalesOrders2023*',
+      database: process.env.DB_NAME,
+      synchronize: true,
+      autoLoadEntities: true,
+    }),
+    EmployeesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

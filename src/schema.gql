@@ -2,29 +2,45 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ManageEmployee {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type Employee {
+  id: ID!
+  name: String!
+  lastName: String!
+  documentNumber: String!
+  address: String!
+  departmentId: String!
+  cityId: String!
+  neighborhood: String!
 }
 
 type Query {
-  manageEmployees: [ManageEmployee!]!
-  manageEmployee(id: Int!): ManageEmployee!
+  employees: [Employee!]!
+  employee(id: ID!): Employee!
 }
 
 type Mutation {
-  createManageEmployee(createManageEmployeeInput: CreateManageEmployeeInput!): ManageEmployee!
-  updateManageEmployee(updateManageEmployeeInput: UpdateManageEmployeeInput!): ManageEmployee!
-  removeManageEmployee(id: Int!): ManageEmployee!
+  createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
+  updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
+  removeEmployee(id: ID!): Employee!
 }
 
-input CreateManageEmployeeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input CreateEmployeeInput {
+  name: String!
+  lastName: String!
+  documentNumber: String!
+  address: String!
+  departmentId: String!
+  cityId: String!
+  neighborhood: String!
 }
 
-input UpdateManageEmployeeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input UpdateEmployeeInput {
+  name: String
+  lastName: String
+  documentNumber: String
+  address: String
+  departmentId: String
+  cityId: String
+  neighborhood: String
+  id: ID!
 }
