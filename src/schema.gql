@@ -29,7 +29,7 @@ type Query {
   employees: [Employee!]!
   employee(id: ID!): Employee!
   users: [User!]!
-  user(id: ID!): User!
+  revalite: AuthResponse!
 }
 
 type Mutation {
