@@ -12,7 +12,7 @@ export class EmployeesService {
   ) {}
 
   async create(createEmployeeInput: CreateEmployeeInput): Promise<Employee> {
-    const newEmployee =  this.employeeRepository.create(createEmployeeInput);
+    const newEmployee = this.employeeRepository.create(createEmployeeInput);
     return this.employeeRepository.save(newEmployee);
   }
 
@@ -21,31 +21,32 @@ export class EmployeesService {
   }
 
   async findOne(id: string): Promise<Employee> {
-
     const employeeFound = await this.employeeRepository.findOne({
-      where:{id}
-    })
+      where: { id },
+    });
 
-    if (!employeeFound) throw new NotFoundException(`The employee with id ${id} was not found`);
+    if (!employeeFound)
+      throw new NotFoundException(`The employee with id ${id} was not found`);
 
     return employeeFound;
   }
 
- async  update(
+  async update(
     id: string,
     updateEmployeeInput: UpdateEmployeeInput
   ): Promise<Employee> {
-
-    const employeeToUpdate = await this.employeeRepository.preload(updateEmployeeInput);
+    const employeeToUpdate = await this.employeeRepository.preload(
+      updateEmployeeInput
+    );
 
     return this.employeeRepository.save(employeeToUpdate);
   }
 
   async remove(id: string): Promise<Employee> {
     const employee = await this.findOne(id);
-    
-     await this.employeeRepository.remove(employee);
 
-     return employee
+    await this.employeeRepository.remove(employee);
+
+    return employee;
   }
 }

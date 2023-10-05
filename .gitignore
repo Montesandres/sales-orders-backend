@@ -1,5 +1,5 @@
 /postgres
-.env
+# .env
 
 # compiled output
 /dist

@@ -13,15 +13,32 @@ type Employee {
   neighborhood: String!
 }
 
+type User {
+  id: ID!
+  userName: String!
+  roles: [String!]!
+  isActive: Boolean!
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
 type Query {
   employees: [Employee!]!
   employee(id: ID!): Employee!
+  users: [User!]!
+  user(id: ID!): User!
 }
 
 type Mutation {
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   removeEmployee(id: ID!): Employee!
+  blockUser(id: ID!): User!
+  signUp(signUpInput: SignUpInput!): AuthResponse!
+  logIn(logInInput: LogInInput!): AuthResponse!
 }
 
 input CreateEmployeeInput {
@@ -43,4 +60,14 @@ input UpdateEmployeeInput {
   cityId: String
   neighborhood: String
   id: ID!
+}
+
+input SignUpInput {
+  userName: String!
+  password: String!
+}
+
+input LogInInput {
+  userName: String!
+  password: String!
 }
