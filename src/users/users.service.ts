@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 import { SignUpInput } from 'src/auth/dto/inputs/sign-up.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @Injectable()
 export class UsersService {
@@ -27,8 +28,14 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+  async findAll(roles:ValidRoles[]): Promise<User[]> {
+
+    if (roles.length === 0)  return await this.userRepository.find();
+
+    return await this.userRepository.createQueryBuilder()
+      .andWhere('ARRAY[roles] && ARRAY[:...roles]')
+      .setParameter('roles',roles)
+      .getMany()
   }
 
   async finOneById(id: string): Promise<User> {
@@ -49,7 +56,9 @@ export class UsersService {
   // }
 
   async blockUser(id: string): Promise<User> {
-    throw new Error(`was not implement yet`);
+    const userToBLock = await this.finOneById(id);
+    userToBLock.isActive = false;
+    return this.userRepository.save(userToBLock);
   }
 
   async finOneByUserName(user: string): Promise<User> {
