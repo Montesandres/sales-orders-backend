@@ -19,23 +19,114 @@ type User {
   roles: [String!]!
   isActive: Boolean!
   lastUpdateBy: User
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type AuthResponse {
   token: String!
   user: User!
 }
 
+type Order {
+  id: ID!
+  orderNumber: Float!
+  deliveryMan: String!
+  deliveryAddress: String!
+  observation: String
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+}
+
+type Department {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type City {
+  id: ID!
+  idCity: String!
+  name: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+}
+
+type Customer {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Category {
+  id: ID!
+  code: String!
+  name: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+}
+
+type OrdersProduct {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type OrderDetail {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type EmployeeType {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type DeliveryEmployee {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
-  employees: [Employee!]!
-  employee(id: ID!): Employee!
+  revalite: AuthResponse!
 
   """return all user by user input"""
   users(roles: [ValidRoles!] = []): [User!]!
 
   """return all user by user input"""
   findUserByID(userId: String!): User!
-  revalite: AuthResponse!
+  employees: [Employee!]!
+  employee(id: ID!): Employee!
+  orders: [Order!]!
+  order(id: ID!): Order!
+  departments: [Department!]!
+  department(id: Int!): Department!
+  cities: [City!]!
+  city(id: ID!): City!
+  customers: [Customer!]!
+  customer(id: Int!): Customer!
+  products: [Product!]!
+  product(id: Int!): Product!
+  categories: [Category!]!
+  category(id: ID!): Category!
+  ordersProducts: [OrdersProduct!]!
+  ordersProduct(id: Int!): OrdersProduct!
+  orderDetails: [OrderDetail!]!
+  orderDetail(id: Int!): OrderDetail!
+  employeeTypes: [EmployeeType!]!
+  employeeType(id: Int!): EmployeeType!
+  deliveryEmployee(id: Int!): DeliveryEmployee!
 }
 
 """roles that exist"""
@@ -49,12 +140,61 @@ enum ValidRoles {
 }
 
 type Mutation {
+  signUp(signUpInput: SignUpInput!): AuthResponse!
+  logIn(logInInput: LogInInput!): AuthResponse!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  blockUser(id: ID!): User!
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   removeEmployee(id: ID!): Employee!
-  blockUser(id: ID!): User!
-  signUp(signUpInput: SignUpInput!): AuthResponse!
-  logIn(logInInput: LogInInput!): AuthResponse!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: ID!): Order!
+  createDepartment(createDepartmentInput: CreateDepartmentInput!): Department!
+  updateDepartment(updateDepartmentInput: UpdateDepartmentInput!): Department!
+  removeDepartment(id: Int!): Department!
+  createCity(createCityInput: CreateCityInput!): City!
+  updateCity(updateCityInput: UpdateCityInput!): City!
+  removeCity(id: ID!): City!
+  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
+  removeCustomer(id: Int!): Customer!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: ID!): Category!
+  createOrdersProduct(createOrdersProductInput: CreateOrdersProductInput!): OrdersProduct!
+  updateOrdersProduct(updateOrdersProductInput: UpdateOrdersProductInput!): OrdersProduct!
+  removeOrdersProduct(id: Int!): OrdersProduct!
+  createOrderDetail(createOrderDetailInput: CreateOrderDetailInput!): OrderDetail!
+  updateOrderDetail(updateOrderDetailInput: UpdateOrderDetailInput!): OrderDetail!
+  removeOrderDetail(id: Int!): OrderDetail!
+  createEmployeeType(createEmployeeTypeInput: CreateEmployeeTypeInput!): EmployeeType!
+  updateEmployeeType(updateEmployeeTypeInput: UpdateEmployeeTypeInput!): EmployeeType!
+  removeEmployeeType(id: Int!): EmployeeType!
+  createDeliveryEmployee(createDeliveryEmployeeInput: CreateDeliveryEmployeeInput!): DeliveryEmployee!
+  updateDeliveryEmployee(updateDeliveryEmployeeInput: UpdateDeliveryEmployeeInput!): DeliveryEmployee!
+  removeDeliveryEmployee(id: Int!): DeliveryEmployee!
+}
+
+input SignUpInput {
+  userName: String!
+  password: String!
+}
+
+input LogInInput {
+  userName: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  userName: String
+  password: String
+  id: ID!
+  roles: [ValidRoles!]
+  isActive: Boolean
 }
 
 input CreateEmployeeInput {
@@ -78,12 +218,114 @@ input UpdateEmployeeInput {
   id: ID!
 }
 
-input SignUpInput {
-  userName: String!
-  password: String!
+input CreateOrderInput {
+  deliveryMan: String!
+  deliveryAddress: String!
+  observation: String
 }
 
-input LogInInput {
-  userName: String!
-  password: String!
+input UpdateOrderInput {
+  deliveryMan: String
+  deliveryAddress: String
+  observation: String
+  id: ID!
+}
+
+input CreateDepartmentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateDepartmentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCityInput {
+  idCity: String!
+  name: String!
+}
+
+input UpdateCityInput {
+  idCity: String
+  name: String
+  id: ID!
+}
+
+input CreateCustomerInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCustomerInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  code: String!
+  name: String!
+}
+
+input UpdateCategoryInput {
+  code: String
+  name: String
+  id: ID!
+}
+
+input CreateOrdersProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrdersProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrderDetailInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderDetailInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateEmployeeTypeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateEmployeeTypeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateDeliveryEmployeeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateDeliveryEmployeeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

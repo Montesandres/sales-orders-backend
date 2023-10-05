@@ -10,6 +10,7 @@ import { SignUpInput } from 'src/auth/dto/inputs/sign-up.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { UpdateUserInput } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {}
-
+ 
   async create(signUpInput: SignUpInput): Promise<User> {
     try {
       const newUser = this.userRepository.create(signUpInput);
@@ -28,14 +29,14 @@ export class UsersService {
     }
   }
 
-  async findAll(roles:ValidRoles[]): Promise<User[]> {
+  async findAll(roles: ValidRoles[]): Promise<User[]> {
+    if (roles.length === 0) return await this.userRepository.find();
 
-    if (roles.length === 0)  return await this.userRepository.find();
-
-    return await this.userRepository.createQueryBuilder()
+    return await this.userRepository
+      .createQueryBuilder()
       .andWhere('ARRAY[roles] && ARRAY[:...roles]')
-      .setParameter('roles',roles)
-      .getMany()
+      .setParameter('roles', roles)
+      .getMany();
   }
 
   async finOneById(id: string): Promise<User> {
@@ -45,15 +46,22 @@ export class UsersService {
       });
     } catch (error) {
       this.handleDBErrors({
-        code:'error-001',
-        detail:`user with id: ${id} not found`
+        code: 'error-001',
+        detail: `user with id: ${id} not found`,
       });
     }
   }
 
-  // update(id: number, updateUserInput: UpdateUserInput) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: string, updateUserInput: UpdateUserInput, user:User): Promise<User> {
+    try {
+      const userPreload = await this.userRepository.preload({...updateUserInput});
+      userPreload.lastUpdateBy = user;
+      return await this.userRepository.save(userPreload);
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+
+  }
 
   async blockUser(id: string): Promise<User> {
     const userToBLock = await this.finOneById(id);
@@ -68,18 +76,17 @@ export class UsersService {
       });
     } catch (error) {
       this.handleDBErrors({
-        code:'error-001',
-        detail:`user: ${user} not found`
+        code: 'error-001',
+        detail: `user: ${user} not found`,
       });
     }
   }
 
   private handleDBErrors(error: any): never {
-
     if (error.code === '23505') {
       throw new BadRequestException(error.detail.replace('Key', ''));
     }
-    if (error.code === 'error-001'){
+    if (error.code === 'error-001') {
       throw new NotFoundException(error.detail);
     }
 

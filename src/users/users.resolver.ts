@@ -6,6 +6,7 @@ import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth-guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { UpdateUserInput } from './dto';
 
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard)
@@ -33,10 +34,14 @@ export class UsersResolver {
   ): Promise<User> {
     return this.usersService.finOneById(userId);
   }
-  // @Mutation(() => User)
-  // updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-  //   return this.usersService.update(updateUserInput.id, updateUserInput);
-  // }
+  
+  @Mutation(() => User)
+  updateUser(
+    @CurrentUser([ValidRoles.sadmin]) user:User,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput):Promise<User> {
+      
+    return this.usersService.update(updateUserInput.id, updateUserInput, user);
+  }
 
   @Mutation(() => User, { name: 'blockUser' })
   blockUser(
