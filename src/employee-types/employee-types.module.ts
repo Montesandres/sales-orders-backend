@@ -6,6 +6,7 @@ import { EmployeeType } from './entities/employee-type.entity';
 
 @Module({
   providers: [EmployeeTypesResolver, EmployeeTypesService],
-  imports:[TypeOrmModule.forFeature([EmployeeType])]
+  imports:[TypeOrmModule.forFeature([EmployeeType])],
+  exports:[EmployeeTypesService]
 })
 export class EmployeeTypesModule {}

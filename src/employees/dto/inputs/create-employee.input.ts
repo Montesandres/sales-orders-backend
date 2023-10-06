@@ -1,5 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsNumberString, IsString } from 'class-validator';
+import { InputType, Field, ID } from '@nestjs/graphql';
+import { IsNumberString, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateEmployeeInput {
@@ -23,4 +23,8 @@ export class CreateEmployeeInput {
   @IsString()
   @Field(()=>String)
   neighborhood:string;
+
+  @IsUUID()
+  @Field(()=>ID)
+  tipeEmployeeId:string;
 }

@@ -53,7 +53,7 @@ export class ProductsService {
 
   async remove(id: string):Promise<Product> {
     const product = await this.findOne(id);
-    await this.productsRepository.softDelete(product);
+    await this.productsRepository.softDelete(id);
  
     return product;
   }

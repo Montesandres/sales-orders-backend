@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Product } from 'src/products/entities/product.entity';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({name:'brands'})
 @ObjectType()
@@ -33,4 +34,8 @@ export class Brand {
   @DeleteDateColumn({ nullable: true, name: 'delete_at' })
   @Field(() => Date, { nullable: true })
   deleteAt: Date;
+
+  @OneToMany(() => Product, (product) => product.brand, { cascade: true })
+  @Field(() => [Product])
+  products: Product[];
 }

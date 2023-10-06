@@ -1,9 +1,11 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Product } from 'src/products/entities/product.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -38,4 +40,8 @@ export class Category {
   @DeleteDateColumn({ nullable: true, name: 'delete_at' })
   @Field(() => Date, { nullable: true })
   deleteAt: Date;
+
+  @OneToMany(() => Product, (product) => product.category, { cascade: true })
+  @Field(() => [Product])
+  products: Product[];
 }

@@ -53,7 +53,7 @@ export class OrderDetailsService {
 
   async remove(id: string):Promise<OrderDetail> {
     const orderDetail = await this.findOne(id);
-    await this.ordersDetailRepository.softDelete(orderDetail);
+    await this.ordersDetailRepository.softDelete(id);
  
     return orderDetail;
   }

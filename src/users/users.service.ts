@@ -6,23 +6,27 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
-import { SignUpInput } from 'src/auth/dto/inputs/sign-up.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
-import { UpdateUserInput } from './dto';
+import { CreateUserInput, UpdateUserInput } from './dto';
+import { EmployeesService } from 'src/employees/employees.service';
 
 @Injectable()
 export class UsersService {
   private logger = new Logger('UsersService');
 
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly employeeService:EmployeesService,
   ) {}
  
-  async create(signUpInput: SignUpInput): Promise<User> {
+  async create(createUserInput: CreateUserInput): Promise<User> {
+
+    const employee = await this.employeeService.create({...createUserInput, tipeEmployeeId:createUserInput.typeEmployeeId})
+
     try {
-      const newUser = this.userRepository.create(signUpInput);
+      const newUser = this.userRepository.create({...createUserInput,employee});
       return await this.userRepository.save(newUser);
     } catch (error) {
       this.handleDBErrors(error);

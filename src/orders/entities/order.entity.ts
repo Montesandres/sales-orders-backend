@@ -1,10 +1,17 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Customer } from 'src/customers/entities/customer.entity';
+import { DeliveryEmployee } from 'src/delivery-employee/entities/delivery-employee.entity';
+import { Employee } from 'src/employees/entities/employee.entity';
+import { OrderDetail } from 'src/order-details/entities/order-detail.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Generated,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -37,11 +44,31 @@ export class Order {
   @Field(() => Date)
   createAt: Date;
 
-  @UpdateDateColumn({ name: 'update:at' })
+  @UpdateDateColumn({ name: 'update_at' })
   @Field(() => Date)
   updateAt: Date;
 
   @DeleteDateColumn({ nullable: true, name: 'delete_at' })
   @Field(() => Date, { nullable: true })
   deleteAt: Date;
+
+  @ManyToOne(()=>Employee, (employee)=>employee.orders,{nullable:false})
+  @JoinColumn({name:'employee_id'})
+  @Field(()=>Employee)
+  employee:Employee;
+
+  @ManyToOne(()=>Customer, (customer)=>customer.orders,{nullable:false})
+  @JoinColumn({name:'customer_id'})
+  @Field(()=>Customer)
+  customer:Customer;
+
+  @ManyToOne(()=>DeliveryEmployee, (deliveryEmployee)=>deliveryEmployee.orders,{nullable:false})
+  @JoinColumn({name:'delivery_employee_id'})
+  @Field(()=>DeliveryEmployee)
+  deliveryEmployee:DeliveryEmployee;
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, { cascade: true })
+  @Field(() => [OrderDetail])
+  orderDetails: OrderDetail[];
+
 }

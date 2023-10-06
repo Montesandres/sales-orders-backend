@@ -52,7 +52,7 @@ export class CategoriesService {
   async remove(id: string):Promise<Category> {
     
     const category = await this.findOne(id);
-    await this.categoryRepository.softDelete(category);
+    await this.categoryRepository.softDelete(id);
 
     return category;
   }

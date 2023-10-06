@@ -2,16 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Employee {
+type DeliveryEmployee {
   id: ID!
   documentNumber: String!
   name: String!
-  lastName: String!
-  address: String!
-  neighborhood: String!
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
+  orders: [Order!]!
 }
 
 """
@@ -19,20 +17,50 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type User {
+type Brand {
   id: ID!
-  userName: String!
-  roles: [String!]!
-  isActive: Boolean!
-  lastUpdateBy: User
+  code: String!
+  name: String!
+  description: String!
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
+  products: [Product!]!
 }
 
-type AuthResponse {
-  token: String!
-  user: User!
+type Category {
+  id: ID!
+  code: String!
+  name: String!
+  description: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+  products: [Product!]!
+}
+
+type Product {
+  id: ID!
+  code: String!
+  name: String!
+  enable: Boolean!
+  salesQuantity: Float!
+  stock: Float!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+  category: Category!
+  brand: Brand!
+}
+
+type OrderDetail {
+  id: ID!
+  quantity: Float!
+  detailDescription: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+  order: Order!
 }
 
 type Order {
@@ -44,6 +72,26 @@ type Order {
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
+  employee: Employee!
+  customer: Customer!
+  deliveryEmployee: DeliveryEmployee!
+  orderDetails: [OrderDetail!]!
+}
+
+type Customer {
+  id: ID!
+  documentNumber: String!
+  name: String!
+  lastName: String!
+  address: String!
+  phone: String!
+  active: Boolean!
+  bornDate: DateTime!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+  orders: [Order!]!
+  city: City!
 }
 
 type Department {
@@ -62,79 +110,49 @@ type City {
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
-}
-
-type Customer {
-  id: ID!
-  documentNumber: String!
-  name: String!
-  lastName: String!
-  address: String!
-  phone: String!
-  active: Boolean!
-  bornDate: DateTime!
-  createAt: DateTime!
-  updateAt: DateTime!
-  deleteAt: DateTime
-}
-
-type Product {
-  id: ID!
-  code: String!
-  name: String!
-  enable: Boolean!
-  salesQuantity: Float!
-  stock: Float!
-  createAt: DateTime!
-  updateAt: DateTime!
-  deleteAt: DateTime
-}
-
-type Category {
-  id: ID!
-  code: String!
-  name: String!
-  description: String!
-  createAt: DateTime!
-  updateAt: DateTime!
-  deleteAt: DateTime
-}
-
-type OrderDetail {
-  id: ID!
-  quantity: Float!
-  detailDescription: String!
-  createAt: DateTime!
-  updateAt: DateTime!
-  deleteAt: DateTime
+  employees: [Employee!]!
+  department: Department!
+  customers: [Customer!]!
 }
 
 type EmployeeType {
   id: ID!
   code: String!
+  roles: [String!]!
   description: String!
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
 }
 
-type DeliveryEmployee {
+type User {
+  id: ID!
+  userName: String!
+  isActive: Boolean!
+  lastUpdateBy: User
+  employee: Employee!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+}
+
+type Employee {
   id: ID!
   documentNumber: String!
   name: String!
+  lastName: String!
+  address: String!
+  neighborhood: String!
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
+  orders: [Order!]!
+  city: City!
 }
 
-type Brand {
-  id: ID!
-  code: String!
-  name: String!
-  description: String!
-  createAt: DateTime!
-  updateAt: DateTime!
-  deleteAt: DateTime
+type AuthResponse {
+  token: String!
+  user: User!
 }
 
 type Query {
@@ -145,6 +163,8 @@ type Query {
 
   """return all user by user input"""
   findUserByID(userId: String!): User!
+  employeeTypes: [EmployeeType!]!
+  employeeType(id: ID!): EmployeeType!
   employees: [Employee!]!
   employee(id: ID!): Employee!
   orders: [Order!]!
@@ -161,8 +181,6 @@ type Query {
   category(id: ID!): Category!
   orderDetails: [OrderDetail!]!
   orderDetail(id: ID!): OrderDetail!
-  employeeTypes: [EmployeeType!]!
-  employeeType(id: ID!): EmployeeType!
   deliveryEmployee(id: ID!): DeliveryEmployee!
   brands: [Brand!]!
   brand(id: ID!): Brand!
@@ -179,10 +197,13 @@ enum ValidRoles {
 }
 
 type Mutation {
-  signUp(signUpInput: SignUpInput!): AuthResponse!
+  signUp(signUpInput: CreateUserInput!): AuthResponse!
   logIn(logInInput: LogInInput!): AuthResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
   blockUser(id: ID!): User!
+  createEmployeeType(createEmployeeTypeInput: CreateEmployeeTypeInput!): EmployeeType!
+  updateEmployeeType(updateEmployeeTypeInput: UpdateEmployeeTypeInput!): EmployeeType!
+  removeEmployeeType(id: ID!): EmployeeType!
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   removeEmployee(id: ID!): Employee!
@@ -207,9 +228,6 @@ type Mutation {
   createOrderDetail(createOrderDetailInput: CreateOrderDetailInput!): OrderDetail!
   updateOrderDetail(updateOrderDetailInput: UpdateOrderDetailInput!): OrderDetail!
   removeOrderDetail(id: ID!): OrderDetail!
-  createEmployeeType(createEmployeeTypeInput: CreateEmployeeTypeInput!): EmployeeType!
-  updateEmployeeType(updateEmployeeTypeInput: UpdateEmployeeTypeInput!): EmployeeType!
-  removeEmployeeType(id: ID!): EmployeeType!
   createDeliveryEmployee(createDeliveryEmployeeInput: CreateDeliveryEmployeeInput!): DeliveryEmployee!
   updateDeliveryEmployee(updateDeliveryEmployeeInput: UpdateDeliveryEmployeeInput!): DeliveryEmployee!
   removeDeliveryEmployee(id: ID!): DeliveryEmployee!
@@ -218,9 +236,15 @@ type Mutation {
   removeBrand(id: ID!): Brand!
 }
 
-input SignUpInput {
+input CreateUserInput {
   userName: String!
   password: String!
+  name: String!
+  lastName: String!
+  documentNumber: String!
+  address: String!
+  neighborhood: String!
+  typeEmployeeId: ID!
 }
 
 input LogInInput {
@@ -231,9 +255,26 @@ input LogInInput {
 input UpdateUserInput {
   userName: String
   password: String
+  name: String
+  lastName: String
+  documentNumber: String
+  address: String
+  neighborhood: String
+  typeEmployeeId: ID
   id: ID!
   roles: [ValidRoles!]
   isActive: Boolean
+}
+
+input CreateEmployeeTypeInput {
+  code: String!
+  description: String!
+}
+
+input UpdateEmployeeTypeInput {
+  code: String
+  description: String
+  id: ID!
 }
 
 input CreateEmployeeInput {
@@ -242,6 +283,7 @@ input CreateEmployeeInput {
   documentNumber: String!
   address: String!
   neighborhood: String!
+  tipeEmployeeId: ID!
 }
 
 input UpdateEmployeeInput {
@@ -250,6 +292,7 @@ input UpdateEmployeeInput {
   documentNumber: String
   address: String
   neighborhood: String
+  tipeEmployeeId: ID
   id: ID!
 }
 
@@ -257,12 +300,14 @@ input CreateOrderInput {
   deliveryMan: String!
   deliveryAddress: String!
   observation: String
+  employeeId: ID!
 }
 
 input UpdateOrderInput {
   deliveryMan: String
   deliveryAddress: String
   observation: String
+  employeeId: ID
   id: ID!
 }
 
@@ -343,17 +388,6 @@ input CreateOrderDetailInput {
 input UpdateOrderDetailInput {
   quantity: Float
   detailDescription: String
-  id: ID!
-}
-
-input CreateEmployeeTypeInput {
-  code: String!
-  description: String!
-}
-
-input UpdateEmployeeTypeInput {
-  code: String
-  description: String
   id: ID!
 }
 

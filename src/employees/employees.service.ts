@@ -9,6 +9,8 @@ import { CreateEmployeeInput, UpdateEmployeeInput } from './dto/index';
 import { Employee } from './entities/employee.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EmployeeTypesService } from 'src/employee-types/employee-types.service';
+
 
 @Injectable()
 export class EmployeesService {
@@ -16,12 +18,16 @@ export class EmployeesService {
 
   constructor(
     @InjectRepository(Employee)
-    private readonly employeeRepository: Repository<Employee>
+    private readonly employeeRepository: Repository<Employee>,
+    private readonly employeeTypeService:EmployeeTypesService
   ) {}
 
   async create(createEmployeeInput: CreateEmployeeInput): Promise<Employee> {
+
+    const employeeType = await this.employeeTypeService.findOne(createEmployeeInput.tipeEmployeeId);
+
     try {
-      const newEmployee = this.employeeRepository.create(createEmployeeInput);
+      const newEmployee = this.employeeRepository.create({...createEmployeeInput,employeeType});
       return this.employeeRepository.save(newEmployee);
     } catch (error) {
       this.handleDBErrors(error);

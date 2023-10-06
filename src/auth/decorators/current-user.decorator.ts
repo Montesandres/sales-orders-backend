@@ -20,7 +20,7 @@ export const CurrentUser = createParamDecorator(
 
     if (roles.length === 0) return user;
     
-    for (const role of user.roles){
+    for (const role of user.employee.employeeType.roles){
         if (roles.includes(role as ValidRoles)){
             return user;
         }

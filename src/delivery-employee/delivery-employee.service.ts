@@ -68,7 +68,7 @@ export class DeliveryEmployeeService {
 
  async  remove(id: string): Promise<DeliveryEmployee> {
     const deliveryEmployee = await this.findOne(id);
-    await this.deliveryEmployeesRepository.softDelete(deliveryEmployee);
+    await this.deliveryEmployeesRepository.softDelete(id);
 
     return deliveryEmployee;
   }

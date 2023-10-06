@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Employee } from 'src/employees/entities/employee.entity';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({name:'users'})
 @ObjectType()
@@ -16,13 +17,13 @@ export class User {
   @Column()
   password:string;
 
-  @Column({
-    type:'text',
-    array:true,
-    default:['user']
-  })
-  @Field(()=>[String])
-  roles:string[];
+  // @Column({
+  //   type:'text',
+  //   array:true,
+  //   default:['user']
+  // })
+  // @Field(()=>[String])
+  // roles:string[];
 
   @Column({
     type:'boolean',
@@ -31,14 +32,18 @@ export class User {
   @Field(()=>Boolean)
   isActive:boolean;
 
-  //todo relations
   @ManyToOne(()=>User, (user)=>user.lastUpdateBy, {nullable:true})
   @JoinColumn({name:'lastUpdateBy'})
   @Field(()=>User,{nullable:true})
   lastUpdateBy:User;
 
+  @OneToOne(() => Employee, (employee) => employee.user,{nullable:false, lazy:true}) // specify inverse side as a second parameter
+  @JoinColumn({name:'employee_id'})
+  @Field(()=>Employee)
+  employee: Employee
+
   @CreateDateColumn()
-  @Field(()=>Date)
+  @Field(()=>Date) 
   createAt:Date;
 
   @UpdateDateColumn()

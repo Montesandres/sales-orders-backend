@@ -1,5 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { InputType, Field, ID } from '@nestjs/graphql';
+import { IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 @InputType()
 export class CreateOrderInput {
@@ -20,4 +20,8 @@ export class CreateOrderInput {
   @MaxLength(500)
   @Field(()=>String, {nullable:true})
   observation?:string;
+
+  @IsUUID()
+  @Field(()=>ID)
+  employeeId:string;
 }

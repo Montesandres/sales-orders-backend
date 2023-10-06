@@ -51,7 +51,7 @@ export class CitiesService {
 
   async remove(id: string):Promise<City>  {
     const city = await this.findOne(id);
-    await this.citiesRepository.softDelete(city);
+    await this.citiesRepository.softDelete(id);
 
     return city;
   }

@@ -51,7 +51,7 @@ export class DepartmentsService {
 
   async remove(id: string):Promise<Department> {
     const department = await this.findOne(id);
-    await this.departmentRepository.softDelete(department);
+    await this.departmentRepository.softDelete(id);
 
     return department;
   }

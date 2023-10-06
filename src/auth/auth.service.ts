@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LogInInput, SignUpInput } from './dto';
+import { LogInInput } from './dto';
 import { AuthResponse } from './types/auth-responses.type';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
+import { CreateUserInput } from 'src/users/dto';
 
 @Injectable()
 export class AuthService {
@@ -13,10 +14,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(signUpInput: SignUpInput): Promise<AuthResponse> {
+  async signUp(createUserInput: CreateUserInput): Promise<AuthResponse> {
+    console.log(createUserInput)
     const user = await this.userService.create({
-      ...signUpInput,
-      password: bcrypt.hashSync(signUpInput.password, 10),
+      ...createUserInput,
+      password: bcrypt.hashSync(createUserInput.password, 10),
     });
     const token = this.getToken(user.id, user.userName);
     return { token, user };
