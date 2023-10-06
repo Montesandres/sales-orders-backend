@@ -1,8 +1,11 @@
+import { IsUUID } from 'class-validator';
 import { CreateOrderDetailInput } from './create-order-detail.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateOrderDetailInput extends PartialType(CreateOrderDetailInput) {
-  @Field(() => Int)
-  id: number;
+  
+  @IsUUID()
+  @Field(()=>ID)
+  id:string;
 }

@@ -1,40 +1,44 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({name:'employees'})
 @ObjectType()
-export class Employee {
+export class Employee { 
   
   @Field(()=>ID)
   @PrimaryGeneratedColumn('uuid')
   id:string;
 
   @Field(()=>String)
-  @Column()
-  name:string;
-
-  @Field(()=>String)
-  @Column()
-  lastName:string;
-
-  @Field(()=>String)
-  @Column()
+  @Column('varchar',{length:15, unique:true, name:'document_number'})
   documentNumber:string;
 
   @Field(()=>String)
-  @Column()
+  @Column('varchar',{length:30})
+  name:string;
+
+  @Field(()=>String)
+  @Column('varchar',{length:30, name:'last_name'})
+  lastName:string;
+
+  @Field(()=>String)
+  @Column('varchar',{length:100})
   address:string;
 
   @Field(()=>String)
-  @Column()
-  departmentId:string;
-
-  @Field(()=>String)
-  @Column()
-  cityId:string;
-
-  @Field(()=>String)
-  @Column()
+  @Column('varchar',{length:100})
   neighborhood:string;
+
+  @CreateDateColumn({name:'create_at'})
+  @Field(()=>Date)
+  createAt:Date;
+
+  @UpdateDateColumn({name:'update:at'})
+  @Field(()=>Date)
+  updateAt:Date;
+
+  @DeleteDateColumn({nullable:true, name:'delete_at'})
+  @Field(()=>Date,{nullable:true})
+  deleteAt:Date
 
 }

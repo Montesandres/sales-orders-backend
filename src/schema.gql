@@ -4,14 +4,20 @@
 
 type Employee {
   id: ID!
+  documentNumber: String!
   name: String!
   lastName: String!
-  documentNumber: String!
   address: String!
-  departmentId: String!
-  cityId: String!
   neighborhood: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type User {
   id: ID!
@@ -23,11 +29,6 @@ type User {
   updateAt: DateTime!
   deleteAt: DateTime
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type AuthResponse {
   token: String!
@@ -46,8 +47,12 @@ type Order {
 }
 
 type Department {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  idDepartment: String!
+  name: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
 
 type City {
@@ -60,42 +65,76 @@ type City {
 }
 
 type Customer {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  documentNumber: String!
+  name: String!
+  lastName: String!
+  address: String!
+  phone: String!
+  active: Boolean!
+  bornDate: DateTime!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
 
 type Product {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  code: String!
+  name: String!
+  enable: Boolean!
+  salesQuantity: Float!
+  stock: Float!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
 
 type Category {
   id: ID!
   code: String!
   name: String!
+  description: String!
   createAt: DateTime!
   updateAt: DateTime!
   deleteAt: DateTime
 }
 
-type OrdersProduct {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type OrderDetail {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  quantity: Float!
+  detailDescription: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
 
 type EmployeeType {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  code: String!
+  description: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
 
 type DeliveryEmployee {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  documentNumber: String!
+  name: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
+}
+
+type Brand {
+  id: ID!
+  code: String!
+  name: String!
+  description: String!
+  createAt: DateTime!
+  updateAt: DateTime!
+  deleteAt: DateTime
 }
 
 type Query {
@@ -111,22 +150,22 @@ type Query {
   orders: [Order!]!
   order(id: ID!): Order!
   departments: [Department!]!
-  department(id: Int!): Department!
+  department(id: ID!): Department!
   cities: [City!]!
   city(id: ID!): City!
   customers: [Customer!]!
-  customer(id: Int!): Customer!
+  customer(id: ID!): Customer!
   products: [Product!]!
-  product(id: Int!): Product!
+  product(id: ID!): Product!
   categories: [Category!]!
   category(id: ID!): Category!
-  ordersProducts: [OrdersProduct!]!
-  ordersProduct(id: Int!): OrdersProduct!
   orderDetails: [OrderDetail!]!
-  orderDetail(id: Int!): OrderDetail!
+  orderDetail(id: ID!): OrderDetail!
   employeeTypes: [EmployeeType!]!
-  employeeType(id: Int!): EmployeeType!
-  deliveryEmployee(id: Int!): DeliveryEmployee!
+  employeeType(id: ID!): EmployeeType!
+  deliveryEmployee(id: ID!): DeliveryEmployee!
+  brands: [Brand!]!
+  brand(id: ID!): Brand!
 }
 
 """roles that exist"""
@@ -152,31 +191,31 @@ type Mutation {
   removeOrder(id: ID!): Order!
   createDepartment(createDepartmentInput: CreateDepartmentInput!): Department!
   updateDepartment(updateDepartmentInput: UpdateDepartmentInput!): Department!
-  removeDepartment(id: Int!): Department!
+  removeDepartment(id: ID!): Department!
   createCity(createCityInput: CreateCityInput!): City!
   updateCity(updateCityInput: UpdateCityInput!): City!
   removeCity(id: ID!): City!
   createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
   updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
-  removeCustomer(id: Int!): Customer!
+  removeCustomer(id: ID!): Customer!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: Int!): Product!
+  removeProduct(id: ID!): Product!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   removeCategory(id: ID!): Category!
-  createOrdersProduct(createOrdersProductInput: CreateOrdersProductInput!): OrdersProduct!
-  updateOrdersProduct(updateOrdersProductInput: UpdateOrdersProductInput!): OrdersProduct!
-  removeOrdersProduct(id: Int!): OrdersProduct!
   createOrderDetail(createOrderDetailInput: CreateOrderDetailInput!): OrderDetail!
   updateOrderDetail(updateOrderDetailInput: UpdateOrderDetailInput!): OrderDetail!
-  removeOrderDetail(id: Int!): OrderDetail!
+  removeOrderDetail(id: ID!): OrderDetail!
   createEmployeeType(createEmployeeTypeInput: CreateEmployeeTypeInput!): EmployeeType!
   updateEmployeeType(updateEmployeeTypeInput: UpdateEmployeeTypeInput!): EmployeeType!
-  removeEmployeeType(id: Int!): EmployeeType!
+  removeEmployeeType(id: ID!): EmployeeType!
   createDeliveryEmployee(createDeliveryEmployeeInput: CreateDeliveryEmployeeInput!): DeliveryEmployee!
   updateDeliveryEmployee(updateDeliveryEmployeeInput: UpdateDeliveryEmployeeInput!): DeliveryEmployee!
-  removeDeliveryEmployee(id: Int!): DeliveryEmployee!
+  removeDeliveryEmployee(id: ID!): DeliveryEmployee!
+  createBrand(createBrandInput: CreateBrandInput!): Brand!
+  updateBrand(updateBrandInput: UpdateBrandInput!): Brand!
+  removeBrand(id: ID!): Brand!
 }
 
 input SignUpInput {
@@ -202,8 +241,6 @@ input CreateEmployeeInput {
   lastName: String!
   documentNumber: String!
   address: String!
-  departmentId: String!
-  cityId: String!
   neighborhood: String!
 }
 
@@ -212,8 +249,6 @@ input UpdateEmployeeInput {
   lastName: String
   documentNumber: String
   address: String
-  departmentId: String
-  cityId: String
   neighborhood: String
   id: ID!
 }
@@ -232,14 +267,14 @@ input UpdateOrderInput {
 }
 
 input CreateDepartmentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  idCity: String!
+  name: String!
 }
 
 input UpdateDepartmentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  idCity: String
+  name: String
+  id: ID!
 }
 
 input CreateCityInput {
@@ -254,25 +289,39 @@ input UpdateCityInput {
 }
 
 input CreateCustomerInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  documentNumber: String!
+  name: String!
+  lastName: String!
+  address: String!
+  phone: String!
+  bornDate: DateTime!
 }
 
 input UpdateCustomerInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  documentNumber: String
+  name: String
+  lastName: String
+  address: String
+  phone: String
+  bornDate: DateTime
+  id: ID!
 }
 
 input CreateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  code: String!
+  name: String!
+  enable: Boolean!
+  salesQuantity: Float!
+  stock: Float!
 }
 
 input UpdateProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  code: String
+  name: String
+  enable: Boolean
+  salesQuantity: Float
+  stock: Float
+  id: ID!
 }
 
 input CreateCategoryInput {
@@ -286,46 +335,52 @@ input UpdateCategoryInput {
   id: ID!
 }
 
-input CreateOrdersProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateOrdersProductInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
 input CreateOrderDetailInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  quantity: Float!
+  detailDescription: String!
 }
 
 input UpdateOrderDetailInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  quantity: Float
+  detailDescription: String
+  id: ID!
 }
 
 input CreateEmployeeTypeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  code: String!
+  description: String!
 }
 
 input UpdateEmployeeTypeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  code: String
+  description: String
+  id: ID!
 }
 
 input CreateDeliveryEmployeeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  lastName: String!
+  documentNumber: String!
+  address: String!
 }
 
 input UpdateDeliveryEmployeeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String
+  lastName: String
+  documentNumber: String
+  address: String
+  id: ID!
+}
+
+input CreateBrandInput {
+  code: String!
+  name: String!
+  description: String!
+}
+
+input UpdateBrandInput {
+  code: String
+  name: String
+  description: String
+  id: ID!
 }

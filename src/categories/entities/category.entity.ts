@@ -1,32 +1,41 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity({ name: 'categories' })
 @ObjectType()
 export class Category {
-
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
   id: string;
 
-  @Column('varchar', {length:10})
-  @Field(()=>String)
-  code:string;
+  @Column('varchar', { length: 10 })
+  @Field(() => String)
+  code: string;
 
-  @Column('varchar', {length:20})
-  @Field(()=>String)
-  name:string;
+  @Column('varchar', { length: 20 })
+  @Field(() => String)
+  name: string;
 
-  @CreateDateColumn()
-  @Field(()=>Date)
-  createAt:Date;
+  @Column('varchar', { length: 500 })
+  @Field(() => String)
+  description: string;
 
-  @UpdateDateColumn()
-  @Field(()=>Date)
-  updateAt:Date;
+  @CreateDateColumn({ name: 'create_at' })
+  @Field(() => Date)
+  createAt: Date;
 
-  @DeleteDateColumn({nullable:true})
-  @Field(()=>Date,{nullable:true})
-  deleteAt:Date
+  @UpdateDateColumn({ name: 'update_at' })
+  @Field(() => Date)
+  updateAt: Date;
 
+  @DeleteDateColumn({ nullable: true, name: 'delete_at' })
+  @Field(() => Date, { nullable: true })
+  deleteAt: Date;
 }

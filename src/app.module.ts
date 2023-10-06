@@ -17,10 +17,10 @@ import { CitiesModule } from './cities/cities.module';
 import { CustomersModule } from './customers/customers.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
-import { OrdersProductsModule } from './orders-products/orders-products.module';
 import { OrderDetailsModule } from './order-details/order-details.module';
 import { EmployeeTypesModule } from './employee-types/employee-types.module';
 import { DeliveryEmployeeModule } from './delivery-employee/delivery-employee.module';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
   imports: [
@@ -69,10 +69,10 @@ import { DeliveryEmployeeModule } from './delivery-employee/delivery-employee.mo
     CustomersModule,
     ProductsModule,
     CategoriesModule,
-    OrdersProductsModule,
     OrderDetailsModule,
     EmployeeTypesModule,
     DeliveryEmployeeModule,
+    BrandsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

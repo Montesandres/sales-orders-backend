@@ -1,35 +1,34 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { DepartmentsService } from './departments.service';
 import { Department } from './entities/department.entity';
-import { CreateDepartmentInput } from './dto/create-department.input';
-import { UpdateDepartmentInput } from './dto/update-department.input';
+import { CreateDepartmentInput, UpdateDepartmentInput } from './dto';
 
 @Resolver(() => Department)
 export class DepartmentsResolver {
   constructor(private readonly departmentsService: DepartmentsService) {}
 
   @Mutation(() => Department)
-  createDepartment(@Args('createDepartmentInput') createDepartmentInput: CreateDepartmentInput) {
+  createDepartment(@Args('createDepartmentInput') createDepartmentInput: CreateDepartmentInput):Promise<Department> {
     return this.departmentsService.create(createDepartmentInput);
   }
 
   @Query(() => [Department], { name: 'departments' })
-  findAll() {
+  findAll():Promise<Department[]> {
     return this.departmentsService.findAll();
   }
 
   @Query(() => Department, { name: 'department' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string):Promise<Department> {
     return this.departmentsService.findOne(id);
   }
 
   @Mutation(() => Department)
-  updateDepartment(@Args('updateDepartmentInput') updateDepartmentInput: UpdateDepartmentInput) {
+  updateDepartment(@Args('updateDepartmentInput') updateDepartmentInput: UpdateDepartmentInput):Promise<Department> {
     return this.departmentsService.update(updateDepartmentInput.id, updateDepartmentInput);
   }
 
   @Mutation(() => Department)
-  removeDepartment(@Args('id', { type: () => Int }) id: number) {
+  removeDepartment(@Args('id', { type: () => ID }) id: string):Promise<Department> {
     return this.departmentsService.remove(id);
   }
 }
